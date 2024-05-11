@@ -22,10 +22,11 @@ export const createPost = async (req, res) => {
             comments: comments
         });
         const data = await post.save();
-        await User.findByIdAndUpdate(data.id,
-            {
-                $push: { posts: data.id }
-            }, { new: true }).exec();
+        console.log(req.user._id);
+        await User.findByIdAndUpdate(req.user._id, {
+            $push: { posts: data._id }
+        }, { new: true }).exec();
+
         return res.status(200).json({
             status: 200,
             message: 'Your post has been uploaded successfully',

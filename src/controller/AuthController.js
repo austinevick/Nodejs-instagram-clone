@@ -1,6 +1,6 @@
 import User from '../model/UserModel.js';
 import bcrypt from 'bcrypt';
-import { signToken } from '../middleware/SchemaValidation.js';
+import { generateAccessToken } from '../middleware/ProtectRoute.js';
 import { handleFileUpload } from '../utils/handleFileUpload.js';
 
 
@@ -29,7 +29,7 @@ export const register = async (req, res) => {
             });
             const userData = (await user.save());
             const data = await User.findOne(userData).select('-password');
-            const token = signToken(userData._id);
+            const token = generateAccessToken(data);
             return res.status(201).json({
                 statusCode: 201,
                 message: 'user created successfully',
@@ -59,22 +59,22 @@ export const login = async (req, res) => {
             const passwordMatch = await bcrypt.compare(password, existingUser.password);
             if (!passwordMatch) {
                 return res.status(401).json({
-                    statusCode: 401,
+                    status: 401,
                     message: 'Invalid username or password'
                 });
             }
         }
         const data = await User.findById(existingUser._id).select('-password');
-        const token = signToken(existingUser._id);
+        const token = generateAccessToken(data);
         return res.status(200).json({
-            statusCode: 200,
+            status: 200,
             message: 'User account found',
             data: data,
             token: token
         });
     } catch (error) {
         return res.status(400).json({
-            statusCode: 400,
+            status: 400,
             message: error.message
         });
     }
@@ -84,14 +84,14 @@ export const getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select('-password');
         return res.status(200).json({
-            statusCode: 200,
+            status: 200,
             message: 'User account found',
             data: user
         });
 
     } catch (error) {
         return res.status(400).json({
-            statusCode: 400,
+            status: 400,
             message: error.message
         });
     }
