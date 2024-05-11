@@ -19,6 +19,8 @@ const server = http.createServer(app);
 const socketIo = new Server(server);
 
 
+
+
 const port = 3000;
 server.listen(port, async () => {
     try {
@@ -31,6 +33,16 @@ server.listen(port, async () => {
 });
 
 
+socketIo.on("connection", (socket) => {
+    console.log(socket.data);
+
+    socket.emit('like', "dksodsjdsffjjf");
+
+    socket.on('likes', (msg) => {
+        console.log('message: ' + msg);
+    });
+
+});
 
 
 

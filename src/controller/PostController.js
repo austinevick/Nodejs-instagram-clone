@@ -1,4 +1,5 @@
 import Post from "../model/PostModel.js";
+import User from "../model/UserModel.js";
 import { handleFileUpload } from "../utils/handleFileUpload.js";
 
 export const createPost = async (req, res) => {
@@ -20,7 +21,11 @@ export const createPost = async (req, res) => {
             creator: creator,
             comments: comments
         });
-        await post.save();
+        const data = await post.save();
+        await User.findByIdAndUpdate(data.id,
+            {
+                $push: { posts: data.id }
+            }, { new: true }).exec();
         return res.status(200).json({
             status: 200,
             message: 'Your post has been uploaded successfully',

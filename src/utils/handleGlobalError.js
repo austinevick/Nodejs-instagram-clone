@@ -1,3 +1,5 @@
+import http from 'http';
+import { Server } from 'socket.io';
 
 export const handleGlobalError = (err, req, res, next) => {
     const statusCode = err.statusCode || 500;
@@ -13,4 +15,9 @@ export const handleGlobalError = (err, req, res, next) => {
     });
 };
 
+export const socketHandler = (app) => {
+    const server = http.createServer(app);
+    const socketIo = new Server(server);
+    return socketIo;
+}
 

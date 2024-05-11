@@ -3,6 +3,7 @@ import { getUserProfile, login, register } from '../controller/AuthController.js
 import { loginValidation, registerValidation } from '../middleware/SchemaValidation.js';
 import { createPost, getPosts, handleLikes, handleUnLikes } from '../controller/PostController.js';
 import { createComment, deleteComment, getCommentByPostId } from '../controller/commentController.js';
+import { getProfileById } from '../controller/ProfileController.js';
 import multer from 'multer';
 
 const router = express.Router();
@@ -31,6 +32,9 @@ router.patch('/post/unLike/:postId', handleUnLikes);
 router.post('/comment/create', createComment);
 router.delete('/comment/delete/:id', deleteComment);
 router.get('/comment/all/:id', getCommentByPostId);
+
+/// Profile
+router.get('/user/profile/:id', getProfileById);
 
 
 export default router;
