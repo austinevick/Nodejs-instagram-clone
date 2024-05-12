@@ -80,20 +80,4 @@ export const login = async (req, res) => {
     }
 };
 
-export const getUserProfile = async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id).select('-password');
-        return res.status(200).json({
-            status: 200,
-            message: 'User account found',
-            data: user
-        });
-
-    } catch (error) {
-        return res.status(400).json({
-            status: 400,
-            message: error.message
-        });
-    }
-}
 

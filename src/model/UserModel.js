@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String },
     password: { type: String },
     imageUrl: { type: String },
-    post: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, {

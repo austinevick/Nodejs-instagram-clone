@@ -1,10 +1,10 @@
 import express from 'express';
 import multer from 'multer';
-import { getUserProfile, login, register } from '../controller/AuthController.js';
+import { login, register } from '../controller/AuthController.js';
 import { loginValidation, registerValidation } from '../middleware/SchemaValidation.js';
 import { createPost, getPosts, handleLikes, handleUnLikes } from '../controller/PostController.js';
 import { createComment, deleteComment, getCommentByPostId } from '../controller/commentController.js';
-import { getProfileById } from '../controller/ProfileController.js';
+import { followUser, getAllUsers, getProfileById, unfollowUser } from '../controller/ProfileController.js';
 import { verifyToken } from '../middleware/ProtectRoute.js';
 
 const router = express.Router();
@@ -21,7 +21,6 @@ const upload = multer({ storage });
 ///Authentication
 router.post('/user/register', upload.single("imageUrl"), registerValidation, register);
 router.post('/user/login', loginValidation, login);
-router.get('/user/profile/:id', verifyToken, getUserProfile);
 
 ///Post
 router.post('/post/create', verifyToken, upload.single("media"), createPost);
@@ -35,7 +34,10 @@ router.delete('/comment/delete/:id', deleteComment);
 router.get('/comment/all/:id', getCommentByPostId);
 
 /// Profile
+router.get('/user/all', getAllUsers);
 router.get('/user/profile/:id', getProfileById);
+router.put('/user/follow/:id', verifyToken, followUser);
+router.put('/user/unfollow/:id', verifyToken, unfollowUser);
 
 
 export default router;

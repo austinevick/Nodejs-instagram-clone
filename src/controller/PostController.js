@@ -22,7 +22,7 @@ export const createPost = async (req, res) => {
             comments: comments
         });
         const data = await post.save();
-        console.log(req.user._id);
+
         await User.findByIdAndUpdate(req.user._id, {
             $push: { posts: data._id }
         }, { new: true }).exec();
@@ -52,7 +52,7 @@ export const getPosts = async (req, res) => {
             .populate({
                 path: 'comments',
                 populate: {
-                    path: 'createdby', select: '_id username imageUrl'
+                    path: 'createdby', select: '-password'
                 }
             });
 
