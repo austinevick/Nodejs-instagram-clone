@@ -4,7 +4,7 @@ import { handleFileUpload } from "../utils/handleFileUpload.js";
 
 export const createPost = async (req, res) => {
     try {
-        const { caption, media_type, creator, comments } = req.body;
+        const { caption, media_type, comments } = req.body;
         let result;
         console.log(req.file.path, req.body);
 
@@ -18,7 +18,7 @@ export const createPost = async (req, res) => {
             media: result.url,
             caption: caption,
             media_type: media_type,
-            creator: creator,
+            creator: req.user._id,
             comments: comments
         });
         const data = await post.save();

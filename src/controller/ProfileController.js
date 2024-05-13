@@ -45,21 +45,22 @@ export const getProfileById = async (req, res) => {
 };
 
 export const followUser = async (req, res) => {
-
     try {
-        if (req.user._id == req.params.id) {
-            return res.status(400).json({
-                status: 400,
+
+        const userId = req.body.userId;
+        const currentUserId = req.user._id;
+        if (currentUserId == userId) {
+            return res.status(403).json({
+                status: 403,
                 message: 'You can not follow yourself'
             });
         } else {
-
-            await User.findByIdAndUpdate(req.user._id, {
-                $push: { following: req.params.id },
+            await User.findByIdAndUpdate(currentUserId, {
+                $push: { following: userId },
             }, { new: true }).exec();
 
-            await User.findByIdAndUpdate(req.params.id, {
-                $push: { followers: req.user._id },
+            await User.findByIdAndUpdate(userId, {
+                $push: { followers: currentUserId },
             }, { new: true }).exec();
             return res.status(200).json({
                 status: 200,
@@ -67,6 +68,7 @@ export const followUser = async (req, res) => {
             });
         }
     } catch (error) {
+        console.log(error);
         return res.status(400).json({
             status: 400,
             message: error.message
@@ -75,13 +77,14 @@ export const followUser = async (req, res) => {
 };
 export const unfollowUser = async (req, res) => {
     try {
-
-        await User.findByIdAndUpdate(req.user._id, {
-            $pull: { following: req.params.id },
+        const userId = req.body.userId;
+        const currentUserId = req.user._id;
+        await User.findByIdAndUpdate(currentUserId, {
+            $pull: { following: userId },
         }, { new: true }).exec();
 
-        await User.findByIdAndUpdate(req.params.id, {
-            $pull: { followers: req.user._id },
+        await User.findByIdAndUpdate(userId, {
+            $pull: { followers: currentUserId },
         }, { new: true }).exec();
         return res.status(200).json({
             status: 200,
@@ -89,6 +92,7 @@ export const unfollowUser = async (req, res) => {
         });
 
     } catch (error) {
+        console.log(error);
         return res.status(400).json({
             status: 400,
             message: error.message

@@ -36,8 +36,8 @@ router.get('/comment/all/:id', getCommentByPostId);
 /// Profile
 router.get('/user/all', getAllUsers);
 router.get('/user/profile/:id', getProfileById);
-router.put('/user/follow/:id', verifyToken, followUser);
-router.put('/user/unfollow/:id', verifyToken, unfollowUser);
+router.post('/user/follow', verifyToken, followUser);
+router.post('/user/unfollow', verifyToken, unfollowUser);
 
 
 export default router;
