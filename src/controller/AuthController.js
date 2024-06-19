@@ -6,24 +6,28 @@ import { handleFileUpload } from '../utils/handleFileUpload.js';
 
 export const register = async (req, res) => {
     try {
-        const { phone, password } = req.body;
+        const { username, firstName, gender, location,
+            lastName, email, phone, password } = req.body;
         console.log(req.file.path, req.body);
-        const existingUser = await User.findOne({ phone: phone });
+        const existingUser = await User.findOne({ email: email });
         if (existingUser) {
             return res.status(200).json({
-                statusCode: 200,
+                status: 200,
                 message: 'user already exist'
             });
         } else {
             const result = await handleFileUpload(req.file.path, "image");
 
             const hashedPassword = await bcrypt.hash(password, 10);
-            const username = req.body.lastName + req.body.phone.slice(-4);
+
             const user = new User({
                 username: username,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                phone: req.body.phone,
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                gender: gender,
+                email: email,
+                location: location,
                 imageUrl: result.url,
                 password: hashedPassword
             });
@@ -31,7 +35,7 @@ export const register = async (req, res) => {
             const data = await User.findOne(userData).select('-password');
             const token = generateAccessToken(data);
             return res.status(201).json({
-                statusCode: 201,
+                status: 201,
                 message: 'user created successfully',
                 data: data,
                 token: token
@@ -40,7 +44,28 @@ export const register = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(400).json({
-            statusCode: 400,
+            status: 400,
+            message: error.message
+        });
+    }
+};
+
+export const checkIfUsernameExist = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const user = await User.findOne(
+            { username: username });
+        if (user) return res.status(200).json({
+            status: 200,
+            message: `${ username } already taken`
+        });
+        return res.status(201).json({
+            status: 201,
+            message: `${ username } is available`
+        });
+    } catch (error) {
+        return res.status(400).json({
+            status: 400,
             message: error.message
         });
     }
@@ -48,19 +73,21 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const existingUser = await User.findOne({ username: username });
+        const { username, email, password } = req.body;
+        const existingUser = await User.findOne({ username: username, email: email });
         if (!existingUser) {
             return res.status(400).json({
-                statusCode: 400,
-                message: 'User doesn\'t exist or account has been deleted'
+                status: 400,
+                message: 'User doesn\'t exist or account has been deleted',
+                data: existingUser
             });
         } else {
             const passwordMatch = await bcrypt.compare(password, existingUser.password);
             if (!passwordMatch) {
                 return res.status(401).json({
                     status: 401,
-                    message: 'Invalid username or password'
+                    message: 'Invalid username or password',
+                    data: existingUser
                 });
             }
         }
@@ -73,8 +100,8 @@ export const login = async (req, res) => {
             token: token
         });
     } catch (error) {
-        return res.status(400).json({
-            status: 400,
+        return res.status(500).json({
+            status: 500,
             message: error.message
         });
     }

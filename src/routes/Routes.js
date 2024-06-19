@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { login, register } from '../controller/AuthController.js';
+import { checkIfUsernameExist, login, register } from '../controller/AuthController.js';
 import { loginValidation, registerValidation } from '../middleware/SchemaValidation.js';
 import { createPost, getPosts, handleLikes, handleUnLikes } from '../controller/PostController.js';
 import { createComment, deleteComment, getCommentByPostId } from '../controller/commentController.js';
@@ -21,6 +21,7 @@ const upload = multer({ storage });
 ///Authentication
 router.post('/user/register', upload.single("imageUrl"), registerValidation, register);
 router.post('/user/login', loginValidation, login);
+router.get('/user/register/:username', checkIfUsernameExist);
 
 ///Post
 router.post('/post/create', verifyToken, upload.single("media"), createPost);

@@ -6,6 +6,11 @@ const registerSchema = Joi.object({
     lastName: Joi.string().required(),
     phone: Joi.string().required(),
     password: Joi.string().min(6).required(),
+    username: Joi.string().required(),
+    email: Joi.string().email(),
+    gender: Joi.string().required(),
+    imageUrl: Joi.string().required(),
+    location: Joi.string().required()
 });
 
 export const registerValidation = (req, res, next) => {

@@ -43,17 +43,3 @@ socketIo.on("connection", (socket) => {
     });
 
 });
-
-
-
-
-
-// let value = 1000000 + '';
-// let len = value.length;
-// let sym = len > 6 ? 'm' : 'k';
-// let hundred = (len == 9 || len == 6);
-// if (len > 3) {
-//     value = value.slice(0, -3) + (hundred ? '' : '') + sym;
-// };
-
-// console.log(value);

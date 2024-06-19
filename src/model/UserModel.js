@@ -4,9 +4,12 @@ const userSchema = new mongoose.Schema({
     firstName: { type: String },
     lastName: { type: String },
     phone: { type: String },
-    username: { type: String },
+    username: { type: String, unique: true },
+    email: { type: String, unique: true },
+    gender: { type: String },
     password: { type: String },
     imageUrl: { type: String },
+    location: { type: String },
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
