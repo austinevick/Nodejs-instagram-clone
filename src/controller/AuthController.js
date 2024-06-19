@@ -7,7 +7,7 @@ import { handleFileUpload } from '../utils/handleFileUpload.js';
 export const register = async (req, res) => {
     try {
         const { username, firstName, gender, location,
-            lastName, email, phone, password } = req.body;
+            lastName, email, password } = req.body;
         console.log(req.file.path, req.body);
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
@@ -24,7 +24,6 @@ export const register = async (req, res) => {
                 username: username,
                 firstName: firstName,
                 lastName: lastName,
-                phone: phone,
                 gender: gender,
                 email: email,
                 location: location,
