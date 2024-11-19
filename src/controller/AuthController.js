@@ -54,12 +54,12 @@ export const checkIfUsernameExist = async (req, res) => {
         const username = req.params.username;
         const user = await User.findOne(
             { username: username });
-        if (user) return res.status(200).json({
-            status: 200,
+        if (user) return res.status(400).json({
+            status: 400,
             message: `${ username } already taken`
         });
-        return res.status(201).json({
-            status: 201,
+        return res.status(200).json({
+            status: 200,
             message: `${ username } is available`
         });
     } catch (error) {
@@ -77,16 +77,14 @@ export const login = async (req, res) => {
         if (!existingUser) {
             return res.status(400).json({
                 status: 400,
-                message: 'User doesn\'t exist or account has been deleted',
-                data: existingUser
+                message: 'User doesn\'t exist or account has been deleted'
             });
         } else {
             const passwordMatch = await bcrypt.compare(password, existingUser.password);
             if (!passwordMatch) {
                 return res.status(401).json({
                     status: 401,
-                    message: 'Invalid username or password',
-                    data: existingUser
+                    message: 'Invalid username or password'
                 });
             }
         }
