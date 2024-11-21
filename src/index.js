@@ -19,8 +19,6 @@ const server = http.createServer(app);
 const socketIo = new Server(server);
 
 
-
-
 const port = 3000;
 server.listen(port, async () => {
     try {

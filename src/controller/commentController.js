@@ -1,4 +1,3 @@
-import { request } from "express";
 import Comments from "../model/Comment.js";
 import Post from "../model/PostModel.js";
 
