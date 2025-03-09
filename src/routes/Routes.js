@@ -41,8 +41,5 @@ router.get('/user/profile/:id', getProfileById);
 router.post('/user/follow', verifyToken, followUser);
 router.post('/user/unfollow', verifyToken, unfollowUser);
 
-/// Music
-router.post('/music/create', upload.single('mediaUrl'), uploadMusic);
-router.get('/music/all', getSongs);
 
 export default router;

@@ -46,7 +46,6 @@ export const getProfileById = async (req, res) => {
 
 export const followUser = async (req, res) => {
     try {
-
         const userId = req.body.userId;
         const currentUserId = req.user._id;
         if (currentUserId == userId) {
@@ -108,9 +107,34 @@ export const deleteProfile = (req, res) => {
     }
 };
 
-
-export const EditProfile = (req, res) => {
+export const EditProfile = async (req, res) => {
     try {
+        const { id } = req.user;
+        const { firstName, lastName, email, username } = req.body;
+        const user = await User.findByIdAndUpdate(id,
+            {
+                firstName, lastName, email, username
+            }, { new: true }).exec();
+        return res.status(200).json({
+            status: 200,
+            message: 'Profile updated successfully',
+            data: user
+        });
+
+    } catch (error) {
+        return res.status(400).json({
+            status: 400,
+            message: error.message
+        });
+    }
+};
+
+export const EditProfilePic = (req, res) => {
+    try {
+        const { id } = req.user;
+        const { firstname } = req.body;
+
+
 
     } catch (error) {
 

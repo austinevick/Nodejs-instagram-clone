@@ -122,3 +122,21 @@ export const handleUnLikes = async (req, res) => {
         });
     }
 };
+
+
+export const deletePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const post = await Post.deleteOne({ _id: id });
+        return res.status(200).json({
+            status: 200,
+            message: "Post was deleted successfully",
+            data: post
+        });
+    } catch (error) {
+        return res.status(400).json({
+            status: 400,
+            message: error.message
+        });
+    }
+};
